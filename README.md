@@ -106,9 +106,24 @@ famplus/
 1. Clone repo → `git clone <this repo>`
 2. Install Python & Node requirements.
 3. Run service helper → `./scripts/setup_services.sh` (installs & starts MySQL/Redis and optional MailHog).
-4. Install pre‑commit → `pip install pre-commit` then `pre-commit install`.
-5. Run the dev server → `cd backend && python manage.py runserver`.
-6. Run tests using SQLite (set `FAMPLUS_SQLITE=1`) → `./scripts/run_tests_sqlite.sh`
+4. Configure environment variables (see list below).
+5. Install pre‑commit → `pip install pre-commit` then `pre-commit install`.
+6. Run the dev server → `cd backend && python manage.py runserver`.
+7. Run tests using SQLite (set `FAMPLUS_SQLITE=1`) → `./scripts/run_tests_sqlite.sh`
+
+### Required Environment Variables
+Set these before running the backend (a `.env` file works too):
+
+```
+SECRET_KEY=<your secret>
+DB_NAME=famplusdb
+DB_USER=famplususer
+DB_PASSWORD=<password>
+DB_HOST=127.0.0.1
+DB_PORT=3306
+```
+
+Optionally set `FAMPLUS_SQLITE=1` to use SQLite instead of MySQL.
 
 ---
 
