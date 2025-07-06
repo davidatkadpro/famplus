@@ -25,17 +25,17 @@
 ## Phase 2 – Domain Apps
 
 ### 2.1 Chores
-- [ ] Port existing `Chore`, `Entry` logic into new app.
-- [ ] REST endpoints for CRUD & approval workflow.
-- [ ] Celery tasks for automatic entry spawning.
+- [x] Port existing `Chore`, `Entry` logic into new app.
+- [x] REST endpoints for CRUD & approval workflow.
+- [x] Celery tasks for automatic entry spawning.
 
 ### 2.2 Accounting
-- [ ] Models: `Account`, `Category`, `Transaction`, `Journal`.
+- [x] Models: `Account`, `Category`, `Transaction`, `Journal`.
 - [ ] Double-entry constraints & balance helpers.
 - [ ] Endpoint for transaction import/export.
 
 ### 2.3 Assets
-- [ ] Models: `Asset`, `Price`, `AssetTransactionLink`.
+- [x] Models: `Asset`, `Price`, `AssetTransactionLink`.
 - [ ] Price query service (reuse CoinGecko integration).
 - [ ] Gain strategy computation (FIFO / LIFO / MAX gain).
 
