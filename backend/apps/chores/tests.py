@@ -68,6 +68,24 @@ class ChoreAPITests(TestCase):
         entry.refresh_from_db()
         self.assertEqual(entry.status, Entry.Status.APPROVED)
 
+    def test_reject_entry(self):
+        chore = Chore.objects.create(
+            family=self.family,
+            name="Sweep",
+            schedule="daily",
+            points=1,
+        )
+        entry = Entry.objects.create(
+            family=self.family,
+            chore=chore,
+            assigned_to=self.user,
+            due_date=date.today(),
+        )
+        response = self.client.post(f"/api/chore-entries/{entry.id}/reject/")
+        self.assertEqual(response.status_code, 200)
+        entry.refresh_from_db()
+        self.assertEqual(entry.status, Entry.Status.REJECTED)
+
     def test_exchange_points_service(self):
         chore = Chore.objects.create(
             family=self.family,

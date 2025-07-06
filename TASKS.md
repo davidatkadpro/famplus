@@ -50,7 +50,7 @@
 - [x] Setup React Router, TanStack Query & JWT auth hooks.
 
 ## Phase 4 – Frontend Features
-- [ ] Chore dashboard & approval modals.
+- [x] Chore dashboard & approval modals.
 - [ ] Transaction ledger with category filter/tagging.
 - [ ] Asset portfolio table & charts.
 - [ ] Family administration pages.
