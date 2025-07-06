@@ -6,6 +6,19 @@ from django.db import models
 from django.utils.crypto import get_random_string
 
 
+class FamilyScopedModel(TimeStampedModel):
+    """Abstract base model carrying a ``family`` foreign key."""
+
+    family = models.ForeignKey(
+        "families.Family",
+        on_delete=models.CASCADE,
+        related_name="%(app_label)s_%(class)ss",
+    )
+
+    class Meta:
+        abstract = True
+
+
 class Family(TimeStampedModel):
     """A group of users managed together."""
 

@@ -19,7 +19,7 @@ This document expands the high-level items in `TASKS.md`.
   - `Family` and `Membership` models.
   - Invitation generation and acceptance views.
 - Integrate Django REST Framework and simple JWT authentication.
-- Implement row-level filtering for `family_id` via DRF permissions and querysets. *(in progress)*
+- Implement row-level filtering for `family_id` via DRF permissions and querysets. ✅
 
 ## Phase 2 – Domain Apps
 ### Chores
