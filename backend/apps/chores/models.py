@@ -39,3 +39,22 @@ class Entry(FamilyScopedModel):
 
     def __str__(self) -> str:  # pragma: no cover - simple repr
         return f"{self.chore} -> {self.assigned_to} on {self.due_date}"
+
+
+class PointExchange(FamilyScopedModel):
+    """Record of a user converting points to cash."""
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="point_exchanges",
+    )
+    points = models.PositiveIntegerField()
+    transaction = models.ForeignKey(
+        "accounting.Transaction",
+        on_delete=models.CASCADE,
+        related_name="point_exchanges",
+    )
+
+    def __str__(self) -> str:  # pragma: no cover - simple repr
+        return f"{self.user} {self.points}pts"

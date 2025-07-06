@@ -7,6 +7,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 
 from .models import Account, Category, Journal, Transaction
+from .tasks import pay_monthly_interest
 
 
 class AccountingModelTests(TestCase):
@@ -67,6 +68,28 @@ class AccountingModelTests(TestCase):
                 debit_account=acct,
                 credit_account=acct,
             )
+
+    def test_monthly_interest_task(self):
+        asset = Account.objects.create(
+            family=self.family,
+            name="Savings",
+            type=Account.Type.ASSET,
+            interest_rate=Decimal("0.01"),
+        )
+        income = Account.objects.create(
+            family=self.family, name="Income", type=Account.Type.INCOME
+        )
+        Transaction.objects.create(
+            family=self.family,
+            description="deposit",
+            amount="100.00",
+            debit_account=asset,
+            credit_account=income,
+        )
+        pay_monthly_interest()
+        self.assertTrue(
+            Transaction.objects.filter(description="Monthly Interest").exists()
+        )
 
 
 class AccountingAPITests(TestCase):
