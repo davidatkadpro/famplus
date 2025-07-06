@@ -76,8 +76,7 @@ class ChoreAPITests(TestCase):
             points=5,
         )
 
-        entry = Entry.objects.create(
-
+        Entry.objects.create(
             family=self.family,
             chore=chore,
             assigned_to=self.user,
@@ -92,3 +91,34 @@ class ChoreAPITests(TestCase):
         self.assertTrue(
             Transaction.objects.filter(description="Points exchange").exists()
         )
+
+    def test_list_entries_scoped_by_family(self):
+        other_user = User.objects.create_user("other@example.com", "pass")
+        other_family = Family.objects.create(name="Jones", owner=other_user)
+        Membership.objects.create(
+            user=other_user, family=other_family, role=Membership.Role.PARENT
+        )
+        other_chore = Chore.objects.create(
+            family=other_family, name="Mow", schedule="daily", points=1
+        )
+        Entry.objects.create(
+            family=other_family,
+            chore=other_chore,
+            assigned_to=other_user,
+            due_date=date.today(),
+        )
+
+        own_chore = Chore.objects.create(
+            family=self.family, name="Sweep", schedule="daily", points=1
+        )
+        Entry.objects.create(
+            family=self.family,
+            chore=own_chore,
+            assigned_to=self.user,
+            due_date=date.today(),
+        )
+
+        resp = self.client.get("/api/chore-entries/")
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.data), 1)
+        self.assertEqual(resp.data[0]["chore"], own_chore.id)

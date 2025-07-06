@@ -1,16 +1,15 @@
 from apps.accounting.models import Account
+from apps.families.mixins import FamilyQuerySetMixin
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import Chore, Entry
 from .serializers import ChoreSerializer, EntrySerializer
-
-from .services import exchange_points, get_user_points
-
+from .services import exchange_points
 
 
-class ChoreViewSet(viewsets.ModelViewSet):
+class ChoreViewSet(FamilyQuerySetMixin, viewsets.ModelViewSet):
     queryset = Chore.objects.all().order_by("id")
     serializer_class = ChoreSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -19,7 +18,7 @@ class ChoreViewSet(viewsets.ModelViewSet):
         serializer.save(family=self.request.user.membership_set.first().family)
 
 
-class EntryViewSet(viewsets.ModelViewSet):
+class EntryViewSet(FamilyQuerySetMixin, viewsets.ModelViewSet):
     queryset = Entry.objects.all().order_by("-due_date")
     serializer_class = EntrySerializer
     permission_classes = [permissions.IsAuthenticated]
