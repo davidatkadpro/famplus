@@ -93,11 +93,11 @@ WSGI_APPLICATION = "project.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-if os.environ.get("FAMPLUS_SQLITE") and "test" in sys.argv:
+if os.environ.get("FAMPLUS_SQLITE"):
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "test.sqlite3",
+            "NAME": BASE_DIR / ("test.sqlite3" if "test" in sys.argv else "db.sqlite3"),
         }
     }
 else:

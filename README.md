@@ -108,7 +108,7 @@ famplus/
 3. Run service helper → `./scripts/setup_services.sh` (installs & starts MySQL/Redis and optional MailHog).
 4. Configure environment variables (see list below).
 5. Install pre‑commit → `pip install pre-commit` then `pre-commit install`.
-6. Run the dev server → `cd backend && python manage.py runserver`.
+6. Run the dev server → `cd backend && FAMPLUS_SQLITE=1 python manage.py runserver` (uses SQLite by default).
 7. Run tests using SQLite (set `FAMPLUS_SQLITE=1`) → `./scripts/run_tests_sqlite.sh`
 8. Start Celery worker & beat → `cd backend && celery -A project worker -B --loglevel=info`
 
