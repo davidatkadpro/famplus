@@ -6,6 +6,10 @@ from django.db import models
 class Asset(FamilyScopedModel):
     name = models.CharField(max_length=255)
     symbol = models.CharField(max_length=20)
+    current_price = models.DecimalField(
+        max_digits=12, decimal_places=4, null=True, blank=True
+    )
+    price_fetched_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self) -> str:  # pragma: no cover - simple repr
         return self.symbol

@@ -36,11 +36,11 @@
 
 ### 2.3 Assets
 - [x] Models: `Asset`, `Price`, `AssetTransactionLink`.
-- [ ] Price query service (reuse CoinGecko integration).
-- [ ] Gain strategy computation (FIFO / LIFO / MAX gain).
+- [x] Price query service (reuse CoinGecko integration).
+- [x] Gain strategy computation (FIFO / LIFO / MAX gain).
 
 ### 2.4 Notifications (optional in v1)
-- [ ] Email & push notifications for due chores & approvals.
+- [x] Email & push notifications for due chores & approvals.
 
 ## Phase 3 – Frontend Foundation
 - [ ] Initialise Vite + React + TypeScript workspace.

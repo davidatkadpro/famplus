@@ -1,18 +1,15 @@
 """URL configuration for the project."""
 
-from apps.families.views import FamilyViewSet
-from apps.chores.views import ChoreViewSet, EntryViewSet
 from apps.accounting.views import (
     AccountViewSet,
     CategoryViewSet,
     JournalViewSet,
     TransactionViewSet,
 )
-from apps.assets.views import (
-    AssetViewSet,
-    PriceViewSet,
-    AssetTransactionLinkViewSet,
-)
+from apps.assets.views import AssetTransactionLinkViewSet, AssetViewSet, PriceViewSet
+from apps.chores.views import ChoreViewSet, EntryViewSet
+from apps.families.views import FamilyViewSet
+from apps.notifications.views import NotificationViewSet
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
@@ -32,6 +29,7 @@ router.register(
     AssetTransactionLinkViewSet,
     basename="assettransactionlink",
 )
+router.register("notifications", NotificationViewSet, basename="notification")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
