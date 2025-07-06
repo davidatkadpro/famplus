@@ -1,4 +1,3 @@
-from apps.core.models import TimeStampedModel
 from apps.families.models import FamilyScopedModel
 from django.conf import settings
 from django.db import models

@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     "apps.core",
     "apps.families",
     "apps.chores",
+    "apps.accounting",
+    "apps.assets",
 ]
 
 MIDDLEWARE = [
@@ -171,5 +173,13 @@ CELERY_BEAT_SCHEDULE = {
     "spawn_entries": {
         "task": "apps.chores.tasks.spawn_entries",
         "schedule": crontab(minute=0, hour=0),
-    }
+    },
+    "daily_summary": {
+        "task": "apps.accounting.tasks.daily_summary",
+        "schedule": crontab(minute=0, hour=1),
+    },
+    "fetch_latest_prices": {
+        "task": "apps.assets.tasks.fetch_latest_prices",
+        "schedule": crontab(minute="*/30"),
+    },
 }

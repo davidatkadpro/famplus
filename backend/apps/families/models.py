@@ -63,6 +63,7 @@ class Invitation(TimeStampedModel):
         Family, on_delete=models.CASCADE, related_name="invitations"
     )
     role = models.CharField(max_length=10, choices=Membership.Role.choices)
+
     def _generate_code() -> str:
         return get_random_string(32)
 
