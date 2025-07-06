@@ -11,15 +11,15 @@
 - [x] Set up CI (GitHub Actions) for test & lint pipelines.
 
 ## Phase 1 – Backend Foundation
-- [ ] Initialise Django project (`django-admin startproject famplus_backend`).
-- [ ] Add **core** app with:
-  - [ ] Custom `User` model (email login).
-  - [ ] Base mixins & utilities.
-- [ ] Implement **families** app:
-  - [ ] `Family` model (name, owner, settings).
-  - [ ] `Membership` model (role: Parent / Child / Guest).
-  - [ ] Invitation & accept flow.
-- [ ] Integrate Django REST Framework & simple-jwt.
+- [x] Initialise Django project (`django-admin startproject famplus_backend`).
+- [x] Add **core** app with:
+  - [x] Custom `User` model (email login).
+  - [x] Base mixins & utilities.
+- [x] Implement **families** app:
+  - [x] `Family` model (name, owner, settings).
+  - [x] `Membership` model (role: Parent / Child / Guest).
+  - [x] Invitation & accept flow.
+- [x] Integrate Django REST Framework & simple-jwt.
 - [ ] Global row-level filtering by `family_id` via custom DRF permissions & querysets.
 
 ## Phase 2 – Domain Apps

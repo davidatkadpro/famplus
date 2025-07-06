@@ -70,6 +70,7 @@ Everything is open-source and designed for self-hosting or simple cloud deployme
 ```text
 famplus/
 ├── backend/                 # Django project & apps
+│   # All Django apps live inside the `apps/` folder
 │   ├── manage.py
 │   ├── requirements.txt
 │   ├── project/             # Django settings
