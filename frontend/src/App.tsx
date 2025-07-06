@@ -1,5 +1,6 @@
 import { Route, Routes, Link } from 'react-router-dom';
 import { ChoreDashboard } from './features/chores';
+import { TransactionLedger } from './features/transactions';
 
 const Home = () => (
   <div className="p-4">
@@ -10,6 +11,11 @@ const Home = () => (
         Go to Chores
       </Link>
     </p>
+    <p className="mt-2">
+      <Link to="/transactions" className="underline text-blue-600">
+        Go to Transactions
+      </Link>
+    </p>
   </div>
 );
 
@@ -18,6 +24,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/chores" element={<ChoreDashboard />} />
+      <Route path="/transactions" element={<TransactionLedger />} />
       <Route
         path="*"
         element={
