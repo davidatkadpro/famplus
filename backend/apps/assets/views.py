@@ -23,6 +23,13 @@ class PriceViewSet(FamilyQuerySetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = PriceSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        asset_id = self.request.query_params.get("asset")
+        if asset_id:
+            qs = qs.filter(asset_id=asset_id)
+        return qs
+
 
 class AssetTransactionLinkViewSet(FamilyQuerySetMixin, viewsets.ModelViewSet):
     queryset = AssetTransactionLink.objects.all().order_by("id")

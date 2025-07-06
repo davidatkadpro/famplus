@@ -6,7 +6,7 @@ from .models import Asset, AssetTransactionLink, Price
 class AssetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asset
-        fields = ["id", "name", "symbol"]
+        fields = ["id", "name", "symbol", "current_price"]
 
 
 class PriceSerializer(serializers.ModelSerializer):

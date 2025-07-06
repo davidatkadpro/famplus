@@ -54,7 +54,7 @@ This document expands the high-level items in `TASKS.md`.
 ## Phase 4 – Frontend Features
 - Chore dashboard with approval modals.
 - Transaction ledger with category filtering and tagging.
-- Asset portfolio table and charts.
+- Asset portfolio table and charts. ✅
 - Family administration pages.
 
 ## Phase 5 – Polish & Deployment
