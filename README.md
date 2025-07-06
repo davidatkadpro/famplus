@@ -108,6 +108,7 @@ famplus/
 3. Run service helper → `./scripts/setup_services.sh` (installs & starts MySQL/Redis and optional MailHog).
 4. Install pre‑commit → `pip install pre-commit` then `pre-commit install`.
 5. Run the dev server → `cd backend && python manage.py runserver`.
+6. Run tests using SQLite (set `FAMPLUS_SQLITE=1`) → `./scripts/run_tests_sqlite.sh`
 
 ---
 
