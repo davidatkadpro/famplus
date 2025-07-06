@@ -110,6 +110,7 @@ famplus/
 5. Install pre‑commit → `pip install pre-commit` then `pre-commit install`.
 6. Run the dev server → `cd backend && python manage.py runserver`.
 7. Run tests using SQLite (set `FAMPLUS_SQLITE=1`) → `./scripts/run_tests_sqlite.sh`
+8. Start Celery worker & beat → `cd backend && celery -A project worker -B --loglevel=info`
 
 ### Required Environment Variables
 Set these before running the backend (a `.env` file works too):
@@ -121,6 +122,8 @@ DB_USER=famplususer
 DB_PASSWORD=<password>
 DB_HOST=127.0.0.1
 DB_PORT=3306
+CELERY_BROKER_URL=redis://127.0.0.1:6379/0
+CELERY_RESULT_BACKEND=redis://127.0.0.1:6379/0
 ```
 
 Optionally set `FAMPLUS_SQLITE=1` to use SQLite instead of MySQL.
