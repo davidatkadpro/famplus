@@ -5,6 +5,7 @@ from apps.families.models import Family, Membership
 from django.test import TestCase
 
 from .models import Chore, Entry
+from .tasks import spawn_entries
 
 
 class ChoreModelTests(TestCase):
@@ -27,3 +28,10 @@ class ChoreModelTests(TestCase):
         )
         self.assertEqual(entry.chore, chore)
         self.assertEqual(entry.status, Entry.Status.AWAITING)
+
+    def test_spawn_entries_task(self):
+        Chore.objects.create(
+            family=self.family, name="Vacuum", schedule="daily", points=2
+        )
+        spawn_entries()
+        self.assertTrue(Entry.objects.filter(chore__name="Vacuum").exists())
