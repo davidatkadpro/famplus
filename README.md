@@ -39,9 +39,30 @@ Everything is open-source and designed for self-hosting or simple cloud deployme
 
 | Layer      | Technology |
 | ---------- | ---------- |
-| **Backend**| Django 5 · Django REST Framework · PostgreSQL · Celery/Redis · Strawberry GraphQL (optional) |
-| **Frontend**| React 18 + Vite + TypeScript · Tailwind CSS · shadcn/ui · TanStack Query |
-| **DevOps**| Docker Compose · GitHub Actions CI · Traefik / Caddy for HTTPS |
+| **Backend**| Django 5.2 · Django REST Framework · MySQL · Channels 4.1 · Daphne 4.1 · Celery[redis] 5.4 |
+| **Frontend**| React 18.3 + Vite + TypeScript · Tailwind CSS · shadcn/ui · TanStack Query 5.21 · lucide-react · axios |
+| **DevOps**| Local MySQL & Redis (no Docker) · GitHub Actions CI · Traefik / Caddy for HTTPS |
+### Key Package Versions
+
+**Backend**
+- Django 5.2
+- sqlparse 0.5.3
+- mysqlclient 2.2.7
+- channels 4.1.0
+- daphne 4.1.0
+- redis 5.0.4
+- celery[redis] 5.4.0
+
+**Frontend**
+- react 18.3.0
+- react-dom 18.3.0
+- react-router-dom 6.23.0
+- @tailwindcss/vite 4.1.10
+- @tanstack/react-query 5.21.0
+- lucide-react 0.300.0
+- axios 1.6.5
+- shadcn@latest
+
 
 ---
 
@@ -83,7 +104,7 @@ famplus/
 ## 6. Getting Started (to be completed later)
 1. Clone repo → `git clone ...`
 2. Run bootstrap script → `./scripts/bootstrap.sh`
-3. `make up` to start Docker stack.
+3. Start MySQL and Redis services, then run `python manage.py runserver`.
 
 Detailed instructions will be added once the scaffolding tasks are finished.
 
