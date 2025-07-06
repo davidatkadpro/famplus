@@ -6,9 +6,9 @@
 
 ## Phase 0 – Bootstrap
 - [x] Create `famplus` monorepo structure (backend, frontend, doc, scripts).
-- [ ] Configure Git pre-commit hooks & linters (black, isort, flake8, prettier, eslint).
-- [ ] Configure local MySQL and Redis services (no Docker) with optional Mailhog.
-- [ ] Set up CI (GitHub Actions) for test & lint pipelines.
+- [x] Configure Git pre-commit hooks & linters (black, isort, flake8, prettier, eslint).
+- [x] Configure local MySQL and Redis services (no Docker) with optional Mailhog.
+- [x] Set up CI (GitHub Actions) for test & lint pipelines.
 
 ## Phase 1 – Backend Foundation
 - [ ] Initialise Django project (`django-admin startproject famplus_backend`).
