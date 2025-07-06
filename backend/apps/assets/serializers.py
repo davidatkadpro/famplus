@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Asset, Price, AssetTransactionLink
+from .models import Asset, AssetTransactionLink, Price
 
 
 class AssetSerializer(serializers.ModelSerializer):

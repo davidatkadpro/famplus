@@ -1,11 +1,13 @@
 from datetime import date
 
+from apps.accounting.models import Account, Transaction
 from apps.core.models import User
 from apps.families.models import Family, Membership
 from django.test import TestCase
 from rest_framework.test import APIClient
 
 from .models import Chore, Entry
+from .services import exchange_points, get_user_points
 from .tasks import spawn_entries
 
 
@@ -65,3 +67,26 @@ class ChoreAPITests(TestCase):
         self.assertEqual(response.status_code, 200)
         entry.refresh_from_db()
         self.assertEqual(entry.status, Entry.Status.APPROVED)
+
+    def test_exchange_points_service(self):
+        chore = Chore.objects.create(
+            family=self.family,
+            name="Dust",
+            schedule="daily",
+            points=5,
+        )
+        Entry.objects.create(
+            family=self.family,
+            chore=chore,
+            assigned_to=self.user,
+            due_date=date.today(),
+            status=Entry.Status.APPROVED,
+        )
+        cash = Account.objects.create(
+            family=self.family, name="Cash", type=Account.Type.ASSET
+        )
+        exchange_points(self.user, cash, 5)
+        self.assertEqual(get_user_points(self.user), 0)
+        self.assertTrue(
+            Transaction.objects.filter(description="Points exchange").exists()
+        )
