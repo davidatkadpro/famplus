@@ -4,7 +4,8 @@ Detailed breakdown of the chores domain.
 
 ## Models
 - `Chore` – template describing the task, schedule and point value.
-- `Entry` – individual occurrence of a chore awaiting completion and approval.
+- `Entry` – individual occurrence of a chore with a `status` field.
+  Possible states: `awaiting`, `completed`, `approved`, `rejected`, `achieved`.
 
 ## Endpoints
 - `GET /api/chores/` – list and filter chores.
