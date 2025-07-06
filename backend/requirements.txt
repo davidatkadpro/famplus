@@ -1,7 +1,7 @@
 asgiref==3.8.1
 black==25.1.0
 click==8.2.1
-Django==5.0.14
+Django==5.2
 django-environ==0.11.2
 djangorestframework==3.14.0
 flake8==7.3.0
@@ -12,10 +12,13 @@ mysqlclient==2.2.7
 packaging==25.0
 pathspec==0.12.1
 platformdirs==4.3.8
-psycopg2-binary==2.9.10
 pycodestyle==2.14.0
 pyflakes==3.4.0
 pytz==2025.2
 setuptools==80.9.0
 sqlparse==0.5.3
 wheel==0.45.1
+channels==4.1.0
+daphne==4.1.0
+redis==5.0.4
+celery[redis]==5.4.0

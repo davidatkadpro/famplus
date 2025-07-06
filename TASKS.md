@@ -7,7 +7,7 @@
 ## Phase 0 – Bootstrap
 - [ ] Create `famplus` monorepo structure (backend, frontend, doc, scripts).
 - [ ] Configure Git pre-commit hooks & linters (black, isort, flake8, prettier, eslint).
-- [ ] Add Docker Compose with Postgres, Redis & optional Mailhog.
+- [ ] Configure local MySQL and Redis services (no Docker) with optional Mailhog.
 - [ ] Set up CI (GitHub Actions) for test & lint pipelines.
 
 ## Phase 1 – Backend Foundation
