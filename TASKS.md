@@ -20,7 +20,7 @@
   - [x] `Membership` model (role: Parent / Child / Guest).
   - [x] Invitation & accept flow.
 - [x] Integrate Django REST Framework & simple-jwt.
-- [ ] Global row-level filtering by `family_id` via custom DRF permissions & querysets.
+- [x] Global row-level filtering by `family_id` via custom DRF permissions & querysets.
 
 ## Phase 2 – Domain Apps
 
