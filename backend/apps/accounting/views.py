@@ -47,6 +47,13 @@ class TransactionViewSet(FamilyQuerySetMixin, viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        category = self.request.query_params.get("category")
+        if category:
+            qs = qs.filter(category_id=category)
+        return qs
+
     def perform_create(self, serializer):
         serializer.save(family=self.request.user.membership_set.first().family)
 

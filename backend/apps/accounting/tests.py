@@ -122,3 +122,27 @@ class AccountingAPITests(TestCase):
         self.assertEqual(resp.status_code, 200)
         content = b"".join(resp.streaming_content).decode()
         self.assertIn("Pay", content)
+
+    def test_filter_transactions_by_category(self):
+        cat1 = Category.objects.create(family=self.family, name="Food")
+        cat2 = Category.objects.create(family=self.family, name="Fun")
+        Transaction.objects.create(
+            family=self.family,
+            description="Pizza",
+            amount="10.00",
+            debit_account=self.debit,
+            credit_account=self.credit,
+            category=cat1,
+        )
+        Transaction.objects.create(
+            family=self.family,
+            description="Movie",
+            amount="15.00",
+            debit_account=self.debit,
+            credit_account=self.credit,
+            category=cat2,
+        )
+        resp = self.client.get(f"/api/transactions/?category={cat1.id}")
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.data), 1)
+        self.assertEqual(resp.data[0]["category"], cat1.id)
