@@ -1,10 +1,10 @@
 from rest_framework import permissions, viewsets
 
-from .models import Asset, Price, AssetTransactionLink
+from .models import Asset, AssetTransactionLink, Price
 from .serializers import (
     AssetSerializer,
-    PriceSerializer,
     AssetTransactionLinkSerializer,
+    PriceSerializer,
 )
 
 
@@ -14,7 +14,7 @@ class AssetViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(family=self.request.user.memberships.first().family)
+        serializer.save(family=self.request.user.membership_set.first().family)
 
 
 class PriceViewSet(viewsets.ReadOnlyModelViewSet):
@@ -29,4 +29,4 @@ class AssetTransactionLinkViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(family=self.request.user.memberships.first().family)
+        serializer.save(family=self.request.user.membership_set.first().family)

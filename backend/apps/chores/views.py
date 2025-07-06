@@ -1,4 +1,4 @@
-from rest_framework import permissions, viewsets, status
+from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -12,7 +12,7 @@ class ChoreViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(family=self.request.user.memberships.first().family)
+        serializer.save(family=self.request.user.membership_set.first().family)
 
 
 class EntryViewSet(viewsets.ModelViewSet):
@@ -21,7 +21,7 @@ class EntryViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(family=self.request.user.memberships.first().family)
+        serializer.save(family=self.request.user.membership_set.first().family)
 
     @action(detail=True, methods=["post"])
     def approve(self, request, pk=None):
