@@ -14,15 +14,24 @@ import os
 import sys
 from pathlib import Path
 
+import environ
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Environment
+env = environ.Env()
+env.read_env(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-1or$gl+%53#w#p737uoz71#fa8@c-l5z(uj0(@jw^tnjq(=bn)"
+SECRET_KEY = env(
+    "SECRET_KEY",
+    default="django-insecure-1or$gl+%53#w#p737uoz71#fa8@c-l5z(uj0(@jw^tnjq(=bn)",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -90,11 +99,11 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": "famplusdb",
-            "USER": "famplususer",
-            "PASSWORD": "pnQtfMn6ZSLST7okghkg",
-            "HOST": "127.0.0.1",
-            "PORT": "3306",
+            "NAME": env("DB_NAME", default="famplusdb"),
+            "USER": env("DB_USER", default="famplususer"),
+            "PASSWORD": env("DB_PASSWORD", default="pnQtfMn6ZSLST7okghkg"),
+            "HOST": env("DB_HOST", default="127.0.0.1"),
+            "PORT": env("DB_PORT", default="3306"),
         }
     }
 

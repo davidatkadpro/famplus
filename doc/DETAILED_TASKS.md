@@ -23,21 +23,25 @@ This document expands the high-level items in `TASKS.md`.
 
 ## Phase 2 – Domain Apps
 ### Chores
+- [Detailed design](chores.md)
 - Port `Chore` and `Entry` models from the old project.
 - Write CRUD API endpoints and approval workflows.
 - Schedule Celery tasks for automatic entry creation.
 
 ### Accounting
+- [Detailed design](accounting.md)
 - Define `Account`, `Category`, `Transaction` and `Journal` models.
 - Enforce double-entry accounting rules and provide balance helpers.
 - Provide import/export endpoints for transactions.
 
 ### Assets
+- [Detailed design](assets.md)
 - Implement `Asset`, `Price` and `AssetTransactionLink` models.
 - Service for fetching prices from CoinGecko.
 - Gain strategy calculations (FIFO / LIFO / MAX gain).
 
 ### Notifications (optional)
+- [Detailed design](notifications.md)
 - Email and push notifications for due chores and approvals.
 
 ## Phase 3 – Frontend Foundation
