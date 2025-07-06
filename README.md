@@ -114,4 +114,7 @@ famplus/
 ## 7. Roadmap
 High-level tasks are tracked in [`TASKS.md`](TASKS.md).  Sub-tasks & in-depth design notes live under [`doc/`](doc/).
 
+## License
+Released under the [MIT License](LICENSE).
+
 Happy hacking! ✨ 
