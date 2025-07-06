@@ -43,11 +43,11 @@
 - [x] Email & push notifications for due chores & approvals.
 
 ## Phase 3 – Frontend Foundation
-- [ ] Initialise Vite + React + TypeScript workspace.
-- [ ] Install Tailwind CSS & shadcn/ui.
-- [ ] Add global theme provider (light/dark).
-- [ ] Configure ESLint & Prettier.
-- [ ] Setup React Router, TanStack Query & JWT auth hooks.
+- [x] Initialise Vite + React + TypeScript workspace.
+- [x] Install Tailwind CSS & shadcn/ui.
+- [x] Add global theme provider (light/dark).
+- [x] Configure ESLint & Prettier.
+- [x] Setup React Router, TanStack Query & JWT auth hooks.
 
 ## Phase 4 – Frontend Features
 - [ ] Chore dashboard & approval modals.
