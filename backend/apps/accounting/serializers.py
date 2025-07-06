@@ -4,9 +4,11 @@ from .models import Account, Category, Journal, Transaction
 
 
 class AccountSerializer(serializers.ModelSerializer):
+    balance = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
+
     class Meta:
         model = Account
-        fields = ["id", "name", "type"]
+        fields = ["id", "name", "type", "balance"]
 
 
 class CategorySerializer(serializers.ModelSerializer):

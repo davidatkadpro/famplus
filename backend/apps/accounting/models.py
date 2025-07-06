@@ -13,6 +13,28 @@ class Account(FamilyScopedModel):
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=10, choices=Type.choices)
 
+    @property
+    def balance(self):
+        """Current balance computed from related transactions."""
+        from django.db.models import Sum
+        from django.db.models.functions import Coalesce
+
+        debit_sum = self.debits.aggregate(
+            total=Coalesce(
+                Sum("amount"),
+                0,
+                output_field=models.DecimalField(max_digits=10, decimal_places=2),
+            )
+        )["total"]
+        credit_sum = self.credits.aggregate(
+            total=Coalesce(
+                Sum("amount"),
+                0,
+                output_field=models.DecimalField(max_digits=10, decimal_places=2),
+            )
+        )["total"]
+        return debit_sum - credit_sum
+
     def __str__(self) -> str:  # pragma: no cover - simple repr
         return self.name
 
@@ -48,6 +70,15 @@ class Transaction(FamilyScopedModel):
         Journal, on_delete=models.SET_NULL, null=True, blank=True
     )
 
+    def clean(self):
+        super().clean()
+        from django.core.exceptions import ValidationError
+
+        if self.debit_account_id == self.credit_account_id:
+            raise ValidationError("Debit and credit accounts cannot be the same.")
+        if self.amount <= 0:
+            raise ValidationError("Transaction amount must be positive.")
+
     def __str__(self) -> str:  # pragma: no cover - simple repr
         return self.description
 
@@ -55,4 +86,5 @@ class Transaction(FamilyScopedModel):
         # Ensure accounts belong to same family
         if self.debit_account.family_id != self.family_id:
             self.family = self.debit_account.family
+        self.full_clean()
         super().save(*args, **kwargs)

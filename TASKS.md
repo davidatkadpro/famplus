@@ -31,8 +31,8 @@
 
 ### 2.2 Accounting
 - [x] Models: `Account`, `Category`, `Transaction`, `Journal`.
-- [ ] Double-entry constraints & balance helpers.
-- [ ] Endpoint for transaction import/export.
+- [x] Double-entry constraints & balance helpers.
+- [x] Endpoint for transaction import/export.
 
 ### 2.3 Assets
 - [x] Models: `Asset`, `Price`, `AssetTransactionLink`.
