@@ -2,6 +2,7 @@ import { Route, Routes, Link } from 'react-router-dom';
 import { ChoreDashboard } from './features/chores';
 import { TransactionLedger } from './features/transactions';
 import { AssetPortfolio } from './features/assets';
+import { FamilyAdmin } from './features/families';
 
 const Home = () => (
   <div className="p-4">
@@ -22,6 +23,11 @@ const Home = () => (
         Go to Assets
       </Link>
     </p>
+    <p className="mt-2">
+      <Link to="/families" className="underline text-blue-600">
+        Go to Families
+      </Link>
+    </p>
   </div>
 );
 
@@ -32,6 +38,7 @@ export default function App() {
       <Route path="/chores" element={<ChoreDashboard />} />
       <Route path="/transactions" element={<TransactionLedger />} />
       <Route path="/assets" element={<AssetPortfolio />} />
+      <Route path="/families" element={<FamilyAdmin />} />
       <Route
         path="*"
         element={

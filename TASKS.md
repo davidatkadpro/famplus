@@ -52,8 +52,8 @@
 ## Phase 4 – Frontend Features
 - [x] Chore dashboard & approval modals.
 - [x] Transaction ledger with category filter/tagging.
- - [x] Asset portfolio table & charts.
-- [ ] Family administration pages.
+- [x] Asset portfolio table & charts.
+- [x] Family administration pages.
 
 ## Phase 5 – Polish & Deployment
 - [ ] Add E2E tests (Playwright / Cypress).

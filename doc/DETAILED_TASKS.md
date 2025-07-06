@@ -55,7 +55,7 @@ This document expands the high-level items in `TASKS.md`.
 - Chore dashboard with approval modals.
 - Transaction ledger with category filtering and tagging.
 - Asset portfolio table and charts. ✅
-- Family administration pages.
+- Family administration pages. ✅
 
 ## Phase 5 – Polish & Deployment
 - Add E2E tests using Playwright or Cypress.
