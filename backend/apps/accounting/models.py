@@ -12,6 +12,13 @@ class Account(FamilyScopedModel):
 
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=10, choices=Type.choices)
+    interest_rate = models.DecimalField(
+        max_digits=5,
+        decimal_places=4,
+        default=0,
+        help_text="Monthly interest rate as decimal (e.g. 0.01 for 1%)",
+    )
+    assets = models.ManyToManyField("assets.Asset", blank=True, related_name="accounts")
 
     @property
     def balance(self):
