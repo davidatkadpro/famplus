@@ -5,7 +5,9 @@ from rest_framework.response import Response
 
 from .models import Chore, Entry
 from .serializers import ChoreSerializer, EntrySerializer
-from .services import exchange_points
+
+from .services import exchange_points, get_user_points
+
 
 
 class ChoreViewSet(viewsets.ModelViewSet):

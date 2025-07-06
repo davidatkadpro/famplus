@@ -75,7 +75,9 @@ class ChoreAPITests(TestCase):
             schedule="daily",
             points=5,
         )
-        Entry.objects.create(
+
+        entry = Entry.objects.create(
+
             family=self.family,
             chore=chore,
             assigned_to=self.user,
