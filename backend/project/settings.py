@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "apps.chores",
     "apps.accounting",
     "apps.assets",
+    "apps.notifications",
 ]
 
 MIDDLEWARE = [
@@ -181,5 +182,9 @@ CELERY_BEAT_SCHEDULE = {
     "fetch_latest_prices": {
         "task": "apps.assets.tasks.fetch_latest_prices",
         "schedule": crontab(minute="*/30"),
+    },
+    "send_due_chore_notifications": {
+        "task": "apps.notifications.tasks.send_due_chore_notifications",
+        "schedule": crontab(minute=0, hour=7),
     },
 }
