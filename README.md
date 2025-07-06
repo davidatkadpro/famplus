@@ -101,12 +101,12 @@ famplus/
 
 ---
 
-## 6. Getting Started (to be completed later)
-1. Clone repo → `git clone ...`
-2. Run bootstrap script → `./scripts/bootstrap.sh`
-3. Start MySQL and Redis services, then run `python manage.py runserver`.
-
-Detailed instructions will be added once the scaffolding tasks are finished.
+## 6. Getting Started
+1. Clone repo → `git clone <this repo>`
+2. Install Python & Node requirements.
+3. Run service helper → `./scripts/setup_services.sh` (installs & starts MySQL/Redis and optional MailHog).
+4. Install pre‑commit → `pip install pre-commit` then `pre-commit install`.
+5. Run the dev server → `cd backend && python manage.py runserver`.
 
 ---
 
