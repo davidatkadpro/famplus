@@ -13,6 +13,7 @@ Detailed breakdown of the chores domain.
 - `PATCH /api/chores/{id}/` – update or archive a chore.
 - `POST /api/chore-entries/` – log completion of a chore entry.
 - `POST /api/chore-entries/{id}/approve/` – parent approval action.
+- `POST /api/chore-entries/{id}/reject/` – reject a completed entry.
 
 ## Background Tasks
 - Celery beat job spawns `Entry` records based on each `Chore`'s schedule.

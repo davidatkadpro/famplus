@@ -28,6 +28,13 @@ export default function ChoreDashboard() {
     },
   );
 
+  const rejectMutation = useMutation(
+    (id: number) => api.post(`/chore-entries/${id}/reject/`),
+    {
+      onSuccess: () => queryClient.invalidateQueries(['chore-entries']),
+    },
+  );
+
   const [selected, setSelected] = useState<Entry | null>(null);
 
   return (
@@ -59,7 +66,7 @@ export default function ChoreDashboard() {
                       onClick={() => setSelected(e)}
                       className="text-blue-600 underline"
                     >
-                      Approve
+                      Review
                     </button>
                   )}
                 </td>
@@ -74,8 +81,10 @@ export default function ChoreDashboard() {
           open
           className="fixed inset-0 bg-black/50 flex items-center justify-center"
         >
-          <div className="bg-white dark:bg-gray-800 p-4 rounded w-64">
-            <p className="mb-4">Approve entry #{selected.id}?</p>
+          <div className="bg-white dark:bg-gray-800 p-4 rounded w-72">
+            <p className="mb-4">
+              Approve or reject entry #{selected.id}?
+            </p>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => {
@@ -85,6 +94,15 @@ export default function ChoreDashboard() {
                 className="px-3 py-1 rounded bg-blue-500 text-white"
               >
                 Approve
+              </button>
+              <button
+                onClick={() => {
+                  rejectMutation.mutate(selected.id);
+                  setSelected(null);
+                }}
+                className="px-3 py-1 rounded bg-red-500 text-white"
+              >
+                Reject
               </button>
               <button
                 onClick={() => setSelected(null)}

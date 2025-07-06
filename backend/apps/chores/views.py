@@ -33,6 +33,14 @@ class EntryViewSet(FamilyQuerySetMixin, viewsets.ModelViewSet):
         entry.save(update_fields=["status"])
         return Response({"status": entry.status}, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=["post"])
+    def reject(self, request, pk=None):
+        """Reject a completed entry."""
+        entry = self.get_object()
+        entry.status = Entry.Status.REJECTED
+        entry.save(update_fields=["status"])
+        return Response({"status": entry.status}, status=status.HTTP_200_OK)
+
     @action(detail=False, methods=["post"])
     def exchange_points(self, request):
         account_id = request.data.get("account")
