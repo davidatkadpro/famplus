@@ -7,9 +7,10 @@ from apps.core.models import User
 from apps.families.models import Family, Membership
 from django.test import TestCase
 from django.utils import timezone
+from rest_framework.test import APIClient
 
 from .gains import calculate_gain, gain_for_asset
-from .models import Asset, AssetTransactionLink
+from .models import Asset, AssetTransactionLink, Price
 from .services import fetch_price_for_symbol, get_price_for_asset
 from .tasks import fetch_latest_prices
 
@@ -156,3 +157,42 @@ class GainComputationTests(TestCase):
         asset.refresh_from_db()
         self.assertEqual(asset.current_price, Decimal("1"))
         self.assertTrue(asset.prices.filter(value="1").exists())
+
+
+class AssetAPITests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user("parent2@example.com", "pass")
+        self.family = Family.objects.create(name="Cooper", owner=self.user)
+        Membership.objects.create(
+            user=self.user, family=self.family, role=Membership.Role.PARENT
+        )
+        self.client.force_authenticate(user=self.user)
+
+    def test_assets_include_current_price(self):
+        asset = Asset.objects.create(
+            family=self.family,
+            name="Bitcoin",
+            symbol="BTC",
+            current_price=Decimal("123.45"),
+        )
+
+        resp = self.client.get("/api/assets/")
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data[0]["id"], asset.id)
+        self.assertEqual(resp.data[0]["current_price"], "123.4500")
+
+    def test_filter_asset_prices_by_asset(self):
+        asset1 = Asset.objects.create(family=self.family, name="A1", symbol="A1")
+        asset2 = Asset.objects.create(family=self.family, name="A2", symbol="A2")
+        Price.objects.create(
+            family=self.family, asset=asset1, value="1", timestamp=timezone.now()
+        )
+        Price.objects.create(
+            family=self.family, asset=asset2, value="2", timestamp=timezone.now()
+        )
+
+        resp = self.client.get(f"/api/asset-prices/?asset={asset1.id}")
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.data), 1)
+        self.assertEqual(resp.data[0]["asset"], asset1.id)
