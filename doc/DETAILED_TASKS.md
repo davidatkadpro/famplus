@@ -11,6 +11,7 @@ This document expands the high-level items in `TASKS.md`.
 
 ## Phase 1 – Backend Foundation
 - Initialise Django project using `django-admin startproject`.
+- Place all backend apps under `backend/apps/` for easier organisation.
 - Add a `core` app:
   - Custom `User` model using email login.
   - Shared mixins and utility helpers.
@@ -18,7 +19,7 @@ This document expands the high-level items in `TASKS.md`.
   - `Family` and `Membership` models.
   - Invitation generation and acceptance views.
 - Integrate Django REST Framework and simple JWT authentication.
-- Implement row-level filtering for `family_id` via DRF permissions and querysets.
+- Implement row-level filtering for `family_id` via DRF permissions and querysets. *(in progress)*
 
 ## Phase 2 – Domain Apps
 ### Chores
