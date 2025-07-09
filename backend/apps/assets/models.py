@@ -31,3 +31,56 @@ class AssetTransactionLink(FamilyScopedModel):
 
     def __str__(self) -> str:  # pragma: no cover - simple repr
         return f"{self.quantity} {self.asset}"  # type: ignore[str-format]
+
+
+class ExchangeOrder(FamilyScopedModel):
+    BUY = "buy"
+    SELL = "sell"
+    SIDE_CHOICES = [(BUY, "Buy"), (SELL, "Sell")]
+
+    OPEN = "open"
+    PARTIAL = "partial"
+    FILLED = "filled"
+    CANCELLED = "cancelled"
+    STATUS_CHOICES = [
+        (OPEN, "Open"),
+        (PARTIAL, "Partially filled"),
+        (FILLED, "Filled"),
+        (CANCELLED, "Cancelled"),
+    ]
+
+    user = models.ForeignKey(
+        "core.User", on_delete=models.CASCADE, related_name="exchange_orders"
+    )
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE, related_name="orders")
+    side = models.CharField(max_length=4, choices=SIDE_CHOICES)
+    quantity = models.DecimalField(max_digits=12, decimal_places=4)
+    price = models.DecimalField(max_digits=12, decimal_places=4)  # limit price
+    remaining = models.DecimalField(max_digits=12, decimal_places=4)
+    status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default=OPEN, db_index=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):  # pragma: no cover
+        return f"{self.side} {self.asset.symbol} {self.quantity} @ {self.price} ({self.status})"
+
+
+class ExchangeTrade(FamilyScopedModel):
+    buy_order = models.ForeignKey(
+        ExchangeOrder,
+        on_delete=models.CASCADE,
+        related_name="trades_as_buy",
+    )
+    sell_order = models.ForeignKey(
+        ExchangeOrder,
+        on_delete=models.CASCADE,
+        related_name="trades_as_sell",
+    )
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE, related_name="trades")
+    price = models.DecimalField(max_digits=12, decimal_places=4)
+    quantity = models.DecimalField(max_digits=12, decimal_places=4)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):  # pragma: no cover
+        return f"Trade {self.quantity} {self.asset.symbol} @ {self.price}"

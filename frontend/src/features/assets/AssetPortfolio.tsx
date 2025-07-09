@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   CategoryScale,
@@ -9,9 +9,12 @@ import {
   TimeScale,
   Tooltip,
 } from 'chart.js';
-import 'chartjs-adapter-date-fns';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../lib/api';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ResponsiveTable } from '@/components/ui/responsive-table';
 
 interface Asset {
   id: number;
@@ -27,32 +30,32 @@ interface Price {
   timestamp: string;
 }
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  TimeScale,
-  Tooltip,
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, TimeScale, Tooltip);
 
 export default function AssetPortfolio() {
   const [selected, setSelected] = useState<number | null>(null);
 
-  const { data: assets, isLoading } = useQuery<Asset[]>(
-    ['assets'],
-    async () => {
+  // Dynamically load date-fns adapter only on this page
+  useEffect(() => {
+    import('chartjs-adapter-date-fns');
+  }, []);
+
+  const { data: assets, isLoading } = useQuery<Asset[]>({
+    queryKey: ['assets'],
+    queryFn: async () => {
       const res = await api.get('/assets/');
       return res.data as Asset[];
     },
-  );
+  });
 
-  const { data: prices } = useQuery<Price[]>(['prices', selected], async () => {
-    if (!selected) return [] as Price[];
-    const res = await api.get('/asset-prices/', {
-      params: { asset: selected },
-    });
-    return res.data as Price[];
+  const { data: prices } = useQuery<Price[]>({
+    queryKey: ['prices', selected],
+    queryFn: async () => {
+      if (!selected) return [] as Price[];
+      const res = await api.get('/asset-prices/', { params: { asset: selected } });
+      return res.data as Price[];
+    },
+    enabled: !!selected,
   });
 
   const chartData = {
@@ -69,7 +72,6 @@ export default function AssetPortfolio() {
 
   const chartOptions = {
     responsive: true,
-    parsing: false,
     scales: {
       x: {
         type: 'time' as const,
@@ -79,40 +81,40 @@ export default function AssetPortfolio() {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Asset Portfolio</h1>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <table className="min-w-full border mb-4">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="p-2 text-left">Symbol</th>
-              <th className="p-2 text-left">Name</th>
-              <th className="p-2 text-left">Current Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            {assets?.map((asset) => (
-              <tr
-                key={asset.id}
-                className="border-t hover:bg-gray-50 cursor-pointer"
-                onClick={() => setSelected(asset.id)}
-              >
-                <td className="p-2">{asset.symbol}</td>
-                <td className="p-2">{asset.name}</td>
-                <td className="p-2">{asset.current_price ?? '–'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-
-      {selected && prices && prices.length > 0 && (
-        <div className="w-full max-w-xl">
-          <Line data={chartData} options={chartOptions} />
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold">Assets</h2>
+          <div className="flex gap-2">
+            <Input placeholder="Search" className="h-8 w-48" />
+            <Button size="sm">Add</Button>
+          </div>
         </div>
-      )}
-    </div>
+      </CardHeader>
+      <CardContent>
+        {isLoading ? (
+          <p>Loading…</p>
+        ) : (
+          <ResponsiveTable
+            data={assets ?? []}
+            columns={[
+              { header: 'Symbol', cell: (a: Asset) => a.symbol },
+              { header: 'Name', cell: (a: Asset) => a.name },
+              {
+                header: 'Price',
+                cell: (a: Asset) => a.current_price ?? '—',
+              },
+            ]}
+            onRowClick={(a: Asset) => setSelected(a.id)}
+          />
+        )}
+
+        {selected && prices && prices.length > 0 && (
+          <div className="mt-6 w-full max-w-xl">
+            <Line data={chartData} options={chartOptions} />
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }

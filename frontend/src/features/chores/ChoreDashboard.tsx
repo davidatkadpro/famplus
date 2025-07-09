@@ -1,6 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../lib/api';
+import { api } from '@/lib/api';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { ResponsiveTable } from '@/components/ui/responsive-table';
 
 interface Entry {
   id: number;
@@ -10,110 +14,98 @@ interface Entry {
   status: string;
 }
 
+interface Chore { id: number; name: string; points: number; }
+
 export default function ChoreDashboard() {
   const queryClient = useQueryClient();
 
-  const { data: entries, isLoading } = useQuery<Entry[]>(
-    ['chore-entries'],
-    async () => {
+  const { data: entries, isLoading } = useQuery<Entry[]>({
+    queryKey: ['chore-entries'],
+    queryFn: async () => {
       const res = await api.get('/chore-entries/');
       return res.data as Entry[];
     },
-  );
+  });
 
-  const approveMutation = useMutation(
-    (id: number) => api.post(`/chore-entries/${id}/approve/`),
-    {
-      onSuccess: () => queryClient.invalidateQueries(['chore-entries']),
-    },
-  );
+  const { data: chores } = useQuery<Chore[]>({
+    queryKey: ['chores'],
+    queryFn: async () => (await api.get('/chores/')).data,
+  });
 
-  const rejectMutation = useMutation(
-    (id: number) => api.post(`/chore-entries/${id}/reject/`),
-    {
-      onSuccess: () => queryClient.invalidateQueries(['chore-entries']),
-    },
-  );
+  const approveMutation = useMutation({
+    mutationFn: (id: number) => api.post(`/chore-entries/${id}/approve/`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['chore-entries'] }),
+  });
 
-  const [selected, setSelected] = useState<Entry | null>(null);
+  const rejectMutation = useMutation({
+    mutationFn: (id: number) => api.post(`/chore-entries/${id}/reject/`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['chore-entries'] }),
+  });
+
+  const completeMutation = useMutation({
+    mutationFn: (entry: Entry) => api.patch(`/chore-entries/${entry.id}/`, { status: 'completed' }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['chore-entries'] }),
+  });
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Chore Dashboard</h1>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <table className="min-w-full border">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="p-2 text-left">ID</th>
-              <th className="p-2 text-left">Chore</th>
-              <th className="p-2 text-left">Due Date</th>
-              <th className="p-2 text-left">Status</th>
-              <th className="p-2" />
-            </tr>
-          </thead>
-          <tbody>
-            {entries?.map((e) => (
-              <tr key={e.id} className="border-t">
-                <td className="p-2">{e.id}</td>
-                <td className="p-2">{e.chore}</td>
-                <td className="p-2">{e.due_date}</td>
-                <td className="p-2 capitalize">{e.status}</td>
-                <td className="p-2 text-right">
-                  {e.status === 'completed' && (
-                    <button
-                      onClick={() => setSelected(e)}
-                      className="text-blue-600 underline"
-                    >
-                      Review
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-
-      {selected && (
-        <dialog
-          open
-          className="fixed inset-0 bg-black/50 flex items-center justify-center"
-        >
-          <div className="bg-white dark:bg-gray-800 p-4 rounded w-72">
-            <p className="mb-4">
-              Approve or reject entry #{selected.id}?
-            </p>
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => {
-                  approveMutation.mutate(selected.id);
-                  setSelected(null);
-                }}
-                className="px-3 py-1 rounded bg-blue-500 text-white"
-              >
-                Approve
-              </button>
-              <button
-                onClick={() => {
-                  rejectMutation.mutate(selected.id);
-                  setSelected(null);
-                }}
-                className="px-3 py-1 rounded bg-red-500 text-white"
-              >
-                Reject
-              </button>
-              <button
-                onClick={() => setSelected(null)}
-                className="px-3 py-1 rounded border"
-              >
-                Cancel
-              </button>
-            </div>
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold">Chore Entries</h2>
+          <div className="flex gap-2">
+            <Input placeholder="Search" className="h-8 w-48" />
+            <Button size="sm">Add</Button>
           </div>
-        </dialog>
-      )}
-    </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {isLoading ? (
+          <p>Loading…</p>
+        ) : (
+          <ResponsiveTable
+            data={entries ?? []}
+            columns={[
+              {
+                header: 'Chore',
+                cell: (e: Entry) =>
+                  chores?.find((c) => c.id === e.chore)?.name ?? e.chore,
+              },
+              { header: 'Due', cell: (e: Entry) => e.due_date },
+              {
+                header: 'Status',
+                cell: (e: Entry) => <span className="capitalize">{e.status}</span>,
+              },
+              {
+                header: '',
+                cell: (e: Entry) => (
+                  <div className="flex gap-2">
+                    {e.status === 'awaiting' && (
+                      <Button size="sm" onClick={() => completeMutation.mutate(e)}>
+                        Complete
+                      </Button>
+                    )}
+                    {e.status === 'completed' && (
+                      <>
+                        <Button size="sm" onClick={() => approveMutation.mutate(e.id)}>
+                          Approve
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => rejectMutation.mutate(e.id)}
+                        >
+                          Reject
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                ),
+                hideOnMobile: true,
+              },
+            ]}
+          />
+        )}
+      </CardContent>
+    </Card>
   );
 }

@@ -107,10 +107,16 @@ famplus/
 2. Install Python & Node requirements.
 3. Run service helper → `./scripts/setup_services.sh` (installs & starts MySQL/Redis and optional MailHog).
 4. Configure environment variables (see list below).
-5. Install pre‑commit → `pip install pre-commit` then `pre-commit install`.
+5. Install pre-commit → `pip install pre-commit` then `pre-commit install`.
 6. Run the dev server → `cd backend && FAMPLUS_SQLITE=1 python manage.py runserver` (uses SQLite by default).
-7. Run tests using SQLite (set `FAMPLUS_SQLITE=1`) → `./scripts/run_tests_sqlite.sh`
-8. Start Celery worker & beat → `cd backend && celery -A project worker -B --loglevel=info`
+7. Run unit tests (SQLite) → `FAMPLUS_SQLITE=1 ./scripts/run_tests_sqlite.sh`
+8. Start background tasks (two terminals):
+   * Worker – `cd backend && celery -A project worker --loglevel=info`
+   * Beat   – `cd backend && celery -A project beat   --loglevel=info`
+9. Launch the React UI → `cd frontend && npm install && npm run dev` (http://localhost:5173 by default).
+
+> ℹ️ The Vite dev server proxies API requests if you export
+> `VITE_API_URL=http://localhost:8000` before starting it.
 
 ### Required Environment Variables
 Set these before running the backend (a `.env` file works too):

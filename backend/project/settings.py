@@ -31,7 +31,8 @@ env.read_env(BASE_DIR / ".env")
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env(
     "SECRET_KEY",
-    default="django-insecure-1or$gl+%53#w#p737uoz71#fa8@c-l5z(uj0(@jw^tnjq(=bn)",
+    cast=str,
+    default="django-insecure-1or$gl+%53#w#p737uoz71#fa8@c-l5z(uj0(@jw^tnjq(=bn)",  # type: ignore[arg-type]
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -104,11 +105,11 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": env("DB_NAME", default="famplusdb"),
-            "USER": env("DB_USER", default="famplususer"),
-            "PASSWORD": env("DB_PASSWORD", default="pnQtfMn6ZSLST7okghkg"),
-            "HOST": env("DB_HOST", default="127.0.0.1"),
-            "PORT": env("DB_PORT", default="3306"),
+            "NAME": env("DB_NAME", cast=str, default="famplusdb"),  # type: ignore[arg-type]
+            "USER": env("DB_USER", cast=str, default="famplususer"),  # type: ignore[arg-type]
+            "PASSWORD": env("DB_PASSWORD", cast=str, default="pnQtfMn6ZSLST7okghkg"),  # type: ignore[arg-type]
+            "HOST": env("DB_HOST", cast=str, default="127.0.0.1"),  # type: ignore[arg-type]
+            "PORT": env("DB_PORT", cast=int, default=3306),  # type: ignore[arg-type]
         }
     }
 
@@ -167,17 +168,25 @@ REST_FRAMEWORK = {
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Celery configuration
-CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="redis://127.0.0.1:6379/0")
-CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default=CELERY_BROKER_URL)
+CELERY_BROKER_URL = env( 
+    "CELERY_BROKER_URL",
+    cast=str,
+    default="redis://127.0.0.1:6379/0", # type: ignore[arg-type]
+)
+CELERY_RESULT_BACKEND = env(  
+    "CELERY_RESULT_BACKEND",
+    cast=str,
+    default=CELERY_BROKER_URL, # type: ignore[arg-type]
+)
 
 CELERY_BEAT_SCHEDULE = {
     "spawn_entries": {
         "task": "apps.chores.tasks.spawn_entries",
-        "schedule": crontab(minute=0, hour=0),
+        "schedule": crontab(minute="0", hour="0"),
     },
     "daily_summary": {
         "task": "apps.accounting.tasks.daily_summary",
-        "schedule": crontab(minute=0, hour=1),
+        "schedule": crontab(minute="0", hour="1"),
     },
     "fetch_latest_prices": {
         "task": "apps.assets.tasks.fetch_latest_prices",
@@ -185,6 +194,6 @@ CELERY_BEAT_SCHEDULE = {
     },
     "send_due_chore_notifications": {
         "task": "apps.notifications.tasks.send_due_chore_notifications",
-        "schedule": crontab(minute=0, hour=7),
+        "schedule": crontab(minute="0", hour="7"),
     },
 }
